@@ -61,7 +61,13 @@ Keep `nodes` as the complete source for the library and learning logic.
 
 ### Mobile map boundary
 
-Use a single visible lane on phones.
+Phones start in a compact global overview. Core mode shows lanes 1, 2, and 3 as parallel vertical tracks with shared stage bands. Course mode shows a single lane (0 or 4).
+
+Keep `mobileMapMode` session-only. Course filters control Suzuki and etude visibility, never library content or learning prerequisites.
+
+`calculateCoreLayout(visibleNodes, width)` returns card dimensions with coordinates. Rendering, edges, and centering use these dimensions. Assert actual card bounds and three distinct lane positions; clipped overflow alone does not prove usability.
+
+Overview uses 100% scale. Core mode caps scale at 100% to keep all tracks visible. Fullscreen must allow opening and closing node details.
 
 Keep the map viewport vertically scrollable.
 
