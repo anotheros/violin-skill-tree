@@ -42,6 +42,33 @@ The project has no package manager, linter, type checker, or automated test runn
 - Include reduced-motion rules for new transitions.
 - Verify that layout toggles preserve the selected node, view, zoom, scroll position, and saved state.
 
+### Map-only responsive state
+
+Keep fullscreen, mobile branch, and map course filters in runtime variables.
+
+Do not add these values to `state`, `save()`, import, export, undo, or checkpoint data.
+
+```js
+let mapFullscreen = false;
+let mapLane = 'all';
+let mapShowBooks = true;
+let mapShowEtudes = true;
+```
+
+Render the map through one visibility predicate.
+
+Keep `nodes` as the complete source for the library and learning logic.
+
+### Mobile map boundary
+
+Use a single visible lane on phones.
+
+Keep the map viewport vertically scrollable.
+
+Set the mobile map sizer to the viewport width and clip transformed overflow.
+
+Assert both document width and default map width in browser checks.
+
 ---
 
 ## Testing Requirements
@@ -54,8 +81,10 @@ Run the following checks for responsive layout changes:
 2. Run `git diff --check`.
 3. Open the page at `375×812`, `390×844`, `768×900`, `1280×800`, and `1440×900`.
 4. Assert no document horizontal overflow.
-5. Test panel toggles, Escape, keyboard activation, all three views, search, filtering, zoom, and state preservation.
-6. Test reduced motion when a new transition is introduced.
+5. Assert the default mobile `#viewport.scrollWidth` does not exceed its client width.
+6. Test panel toggles, Escape, keyboard activation, all three views, search, filtering, zoom, and state preservation.
+7. Test fullscreen `aria-pressed`, exit behavior, and node scale at desktop and mobile sizes.
+8. Test reduced motion when a new transition is introduced.
 
 ---
 
