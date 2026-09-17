@@ -27,3 +27,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 2: 完成技能地图全屏与移动端浏览优化
+<!-- trellis-session: v=2 fp=d769f297392d761c -->
+
+**Date**: 2026-09-17
+**Task**: 完成技能地图全屏与移动端浏览优化
+**Branch**: `fullscreen-map-mobile-scroll`
+
+### Summary
+
+实现页面内全屏地图、桌面放大节点、手机单分支纵向浏览，以及铃木教程和练习曲独立地图筛选。完成 375、390、768、1280、1440px 浏览器回归，并确认学习状态、教材页和存档格式保持兼容。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0334cc8` | feat: 优化技能地图全屏与移动端浏览 |
+
+### Status
+
+[OK] **Completed**
