@@ -71,3 +71,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 4: 拆分左手拨弦入门与组合应用
+<!-- trellis-session: v=2 fp=9547124cfffe9e6c -->
+
+**Date**: 2026-09-17
+**Task**: 拆分左手拨弦入门与组合应用
+**Branch**: `split-left-hand-pizzicato`
+
+### Summary
+
+保留 pizzleft ID 与旧清单，新增 pizzleftcombo，基础与组合分别评估；修改帕格尼尼关联。浏览器 375/390/1280 布局、旧存档、完成撤销、实际导入导出通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `16f1bbd` | fix: 拆分左手拨弦入门与组合应用并保留旧进度 |
+
+### Status
+
+[OK] **Completed**
