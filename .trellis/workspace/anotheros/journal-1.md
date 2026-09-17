@@ -49,3 +49,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 3: 移动端全局预览与三轨道技能地图
+<!-- trellis-session: v=2 fp=b547ea1c114995e9 -->
+
+**Date**: 2026-09-17
+**Task**: 移动端全局预览与三轨道技能地图
+**Branch**: `mobile-global-skill-preview`
+
+### Summary
+
+主会话完成三条并排核心轨道与全局预览。保留两个课程开关，修复视图返回和全屏详情。Chromium 五种宽度、节点边界、导航存档隔离和学习操作回归通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b112329` | feat: 增加移动端全局预览与三轨道技能地图 |
+
+### Status
+
+[OK] **Completed**
