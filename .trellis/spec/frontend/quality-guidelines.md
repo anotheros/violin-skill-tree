@@ -59,6 +59,14 @@ Render the map through one visibility predicate.
 
 Keep `nodes` as the complete source for the library and learning logic.
 
+### Saved node identity when splitting skills
+
+Retain the original ID for the node that preserves the original assessment scope. For example, `pizzleft` remains the introductory skill; `pizzleftcombo` is a new assessment with no inherited completion.
+
+Preserve checklist meanings and index order because `state.checks[id]` stores numeric indexes. Keep notes, historical log text, focus IDs, and user prerequisite overrides intact. Never strengthen the old node's prerequisites silently: `pruneInvalid()` could erase valid historical completion.
+
+Verify old-save import and export roundtrips, unchanged growth points, readiness without automatic completion, and independent completion/rollback of the new node.
+
 ### Mobile map boundary
 
 Phones start in a compact global overview. Core mode shows lanes 1, 2, and 3 as parallel vertical tracks with shared stage bands. Course mode shows a single lane (0 or 4).
