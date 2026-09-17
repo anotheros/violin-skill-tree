@@ -26,6 +26,77 @@ dialog{color:var(--text);background:#151e25;border:1px solid #4c5b5d;border-radi
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media print{body{background:white;color:black}.sidebar,.topbar,.navrow,.map-toolbar,.legend-row,.detail,.maparea,.starter-banner,.toast-stack{display:none!important}.app,.main,.workspace,.center{display:block;height:auto;overflow:visible}.library-view{display:block!important;overflow:visible}.mapping-table{color:black}.mapping-table td{color:black}button{color:black!important}}
 </style>
+<style>
+/* Layout controls stay in the current page session and never enter the saved progress state. */
+.app{transition:grid-template-columns .2s ease}
+.titleblock{flex:1 1 260px;min-width:0}
+.titleblock h1{overflow-wrap:anywhere}
+.topbar{flex-wrap:wrap}
+.topstats,.topactions{flex-shrink:0}
+.mobile-menu-btn,.mobile-detail-open{display:inline-flex;flex-shrink:0}
+.mobile-menu-btn{width:34px;height:34px}
+.mobile-detail-open{margin-left:auto}
+.detail .mobile-close{display:inline-flex}
+.detail-head{min-height:34px}
+.section-head,.task-board-head{gap:9px;flex-wrap:wrap}
+.section-head>button,.task-board-head>button{flex-shrink:0}
+.task-board-head>div{min-width:0;flex:1}
+.view-heading>div{min-width:0}
+.starter-banner .grow{min-width:0}
+.map-toolbar{flex-wrap:wrap;align-content:center}
+.search-wrap{min-width:0;flex:1 1 220px}
+.map-toolbar .compact-select{flex:0 1 120px}
+.legend-row{flex-wrap:wrap;row-gap:8px}
+.legend-help{min-height:34px;padding:0 3px}
+.journalmetrics{flex-wrap:wrap}
+.journal-form{min-width:0}
+
+@media(min-width:731px){
+ .app.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr)}
+ .app.sidebar-collapsed>.sidebar{min-width:0;padding-left:0;padding-right:0;border-right:0;visibility:hidden;overflow:hidden;pointer-events:none}
+ .app.sidebar-collapsed~.toast-stack{left:22px}
+}
+
+@media(min-width:1031px){
+ .detail.detail-collapsed{display:none}
+}
+
+@media(max-width:1030px){
+ .topbar{align-items:flex-start}
+ .topstats{margin-left:auto}
+ .topactions{margin-left:auto}
+ .library-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media(max-width:730px){
+ .app{transition:none}
+ .topbar{padding:20px 16px 17px;gap:12px}
+ .titleblock{flex-basis:160px}
+ .titleblock h1{font-size:23px;letter-spacing:.4px;white-space:nowrap}
+ .subtitle{max-width:230px}
+ .mobile-menu-btn{width:34px}
+ .topstats{gap:9px;margin-left:auto}
+ .navrow{height:auto;min-height:46px;gap:12px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap}
+ .navrow::-webkit-scrollbar{display:none}
+ .tab{flex-shrink:0}
+ .mobile-detail-open{flex-shrink:0}
+ .map-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;padding:11px 12px;gap:7px;min-height:96px}
+ .search-wrap{grid-column:1/-1;width:100%;max-width:none}
+ .map-toolbar .compact-select{grid-column:1;min-width:0;max-width:none;width:100%;flex:none}
+ .map-toolbar .iconbtn{width:34px;height:34px}
+ .starter-banner{flex-wrap:wrap}
+ .starter-banner .grow{flex-basis:calc(100% - 30px)}
+ .library-grid{grid-template-columns:1fr}
+ .etudegrid{grid-template-columns:1fr}
+ .journal-form{grid-template-columns:1fr}
+ .journal-form .btn{grid-column:auto}
+ .task-board-head{align-items:flex-start}
+ .task-board-head>button{margin-left:auto}
+ .detail{width:var(--detail);padding:20px 18px 28px}
+}
+
+@media(prefers-reduced-motion:reduce){.app{transition:none}}
+</style>
 </head>
 <body>
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
@@ -57,7 +128,7 @@ dialog{color:var(--text);background:#151e25;border:1px solid #4c5b5d;border-radi
 </defs></svg>
 <div class="mobile-backdrop" id="mobileBackdrop"></div>
 <div class="app">
-<aside class="sidebar" id="sidebar">
+ <aside class="sidebar" id="sidebar" aria-label="学习旅程导航">
  <div class="brand"><svg class="brand-symbol" viewBox="0 0 40 50" fill="none" aria-hidden="true"><path d="m23 4-8 30m11-28-8 30M15 19C6 16 2 25 9 29c-7 2-6 12 1 15 7 2 13-5 9-10 8 0 11-9 6-13" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="4" r="2.4" stroke="currentColor"/><path d="m35 8-9 37M34 9l2 1-9 36-2-1M11 34h8" stroke="currentColor" stroke-width="1.2"/></svg><div><div class="brand-title">弦途</div><div class="brand-sub">THE VIOLIN ATLAS</div></div></div>
  <div class="profile"><div class="profile-top">属于你的音乐旅程</div><div class="profile-name">每天一点，持续生长。</div><div class="profile-count" id="growthPoints">0<small>枚成长点</small></div><div class="hint" style="font-size:9px;margin-top:8px;color:#97b0a1">每项达标 +1 · 复习不重复计分</div></div>
  <div class="side-label">旅程章节 / CHAPTERS</div><nav class="journey" id="journey" aria-label="地图章节"></nav>
@@ -68,10 +139,10 @@ dialog{color:var(--text);background:#151e25;border:1px solid #4c5b5d;border-radi
  <div class="sidebar-footer"><button class="btn small ghost" id="saveMenu">管理存档</button><button class="btn small ghost" id="helpButton">使用说明</button></div>
 </aside>
 <main class="main">
- <header class="topbar"><button class="iconbtn mobile-menu-btn" id="mobileMenu" aria-label="展开导航"><svg class="icon"><use href="#i-menu"/></svg></button><div class="titleblock"><div class="eyebrow">A LITTLE PRACTICE. A NEW POSSIBILITY.</div><h1>小提琴技能树</h1><p class="subtitle">把练习变成看得见的成长，而不是一场赶路。</p></div><div class="topstats"><div class="topstat"><strong id="statNodes">0</strong><span>已点亮节点</span></div><div class="topstat"><strong id="statReady">0</strong><span>可学习节点</span></div><div class="topstat"><strong id="statPieces">0</strong><span>已记录曲目</span></div></div><div class="topactions"><button class="btn small ghost" id="demoButton"><svg class="icon"><use href="#i-spark"/></svg><span>看看演示</span></button><button class="btn small" id="addNodeTop"><svg class="icon"><use href="#i-plus"/></svg><span>自定义节点</span></button></div></header>
+ <header class="topbar"><button class="iconbtn mobile-menu-btn" id="mobileMenu" aria-controls="sidebar" aria-expanded="false" aria-label="展开导航" title="展开导航"><svg class="icon"><use href="#i-menu"/></svg></button><div class="titleblock"><div class="eyebrow">A LITTLE PRACTICE. A NEW POSSIBILITY.</div><h1>小提琴技能树</h1><p class="subtitle">把练习变成看得见的成长，而不是一场赶路。</p></div><div class="topstats"><div class="topstat"><strong id="statNodes">0</strong><span>已点亮节点</span></div><div class="topstat"><strong id="statReady">0</strong><span>可学习节点</span></div><div class="topstat"><strong id="statPieces">0</strong><span>已记录曲目</span></div></div><div class="topactions"><button class="btn small ghost" id="demoButton"><svg class="icon"><use href="#i-spark"/></svg><span>看看演示</span></button><button class="btn small" id="addNodeTop"><svg class="icon"><use href="#i-plus"/></svg><span>自定义节点</span></button></div></header>
  <div class="demo-banner" id="demoBanner" hidden><svg class="icon"><use href="#i-spark"/></svg><span>演示存档 · 点亮数据仅用于体验，不代表你的实际水平，也不会覆盖正式进度。</span><button class="btn small ghost" id="exitDemo">退出演示</button></div>
  <div class="storage-warning" id="storageWarning" hidden><span id="storageWarningText">浏览器无法保存进度，请及时导出存档。</span><button class="linkbutton" id="warningExport">导出</button></div>
- <nav class="navrow" aria-label="页面视图"><button class="tab active" data-view="map"><svg class="icon"><use href="#i-tree"/></svg>技能地图</button><button class="tab" data-view="library"><svg class="icon"><use href="#i-book"/></svg>教材与曲目</button><button class="tab" data-view="journal"><svg class="icon"><use href="#i-clock"/></svg>练习日志</button><span class="navnote">参考路线 · 自己确认达标 · 老师可调整</span><button class="iconbtn mobile-detail-open" id="openDetail" title="打开当前节点详情" aria-label="打开当前节点详情"><svg class="icon"><use href="#i-target"/></svg></button></nav>
+ <nav class="navrow" aria-label="页面视图"><button class="tab active" data-view="map"><svg class="icon"><use href="#i-tree"/></svg>技能地图</button><button class="tab" data-view="library"><svg class="icon"><use href="#i-book"/></svg>教材与曲目</button><button class="tab" data-view="journal"><svg class="icon"><use href="#i-clock"/></svg>练习日志</button><span class="navnote">参考路线 · 自己确认达标 · 老师可调整</span><button class="iconbtn mobile-detail-open" id="openDetail" aria-controls="detail" aria-expanded="false" title="打开当前节点详情" aria-label="打开当前节点详情"><svg class="icon"><use href="#i-target"/></svg></button></nav>
  <div class="workspace"><section class="center">
   <div class="starter-banner" id="starterBanner"><svg class="icon"><use href="#i-spark"/></svg><div class="grow"><b>已有基础？从你真正会的地方开始。</b><p>你正在铃木 1 册收尾。先补录已会的基础；这里不会替你自动判定达标。</p></div><button class="btn small" id="setupButton">补录基础</button><button class="iconbtn" id="dismissStarter" aria-label="隐藏入门提示" style="width:22px;height:26px"><svg class="icon" style="width:13px"><use href="#i-close"/></svg></button></div>
   <div id="mapView" style="display:flex;flex-direction:column;flex:1;min-height:0">
@@ -81,7 +152,7 @@ dialog{color:var(--text);background:#151e25;border:1px solid #4c5b5d;border-radi
   </div>
   <div class="library-view" id="libraryView" hidden></div>
   <div class="journal-view" id="journalView" hidden></div>
- </section><aside class="detail" id="detail" aria-label="节点详情"></aside></div>
+ </section><aside class="detail" id="detail" aria-label="节点详情" aria-hidden="true"></aside></div>
 </main>
 </div>
 <dialog id="modal"><div id="modalContent"></div></dialog>
@@ -147,7 +218,7 @@ function markTask(id,tid){const n=node(id),t=allTasks(n).find(x=>x.id===tid);if(
 function undoLast(){if(!undoStack.length){toast('本次打开页面后还没有可撤销的进度操作。');return;}state=undoStack.pop();refreshNodes();save();render();toast('已恢复上一步之前的进度。');}
 function reviewNode(id){const n=node(id);if(!n)return;showModal('记录一次复习',`<p class="hint">复习不重复增加成长点。记录当下发现，比重复打勾更有用。</p><div class="modal-form" style="margin-top:17px"><div class="field"><label for="reviewMinutes">练习分钟数（可留空）</label><input id="reviewMinutes" type="number" min="1" max="600" placeholder="例如 15"></div><div class="field"><label for="reviewText">今天练了什么？</label><textarea id="reviewText" rows="3" maxlength="3000" placeholder="例如：慢速练了换弦，先不追求速度。"></textarea></div></div>`,[{label:'取消',close:true},{label:'保存复习',primary:true,onClick:()=>{const value=$('reviewMinutes').value,m=value?Number(value):0;if(value&&(!Number.isInteger(m)||m<1||m>600)){modalError('分钟数请填 1～600 的整数，或留空。');return;}checkpoint();log('review','复习「'+n.title+'」',$('reviewText').value.trim(),id,m);closeModal();commit();toast('复习已记入日志。');}}]);}
 function toggleFocus(id){if(state.focus.includes(id))state.focus=state.focus.filter(x=>x!==id);else state.focus=[...state.focus,id].slice(-5);save();renderDetail();renderMap();renderSidebar();}
-function selectNode(id,center=false){if(!node(id))return;selected=id;if(node(id).kind!=='skill'&&allTasks(node(id)).length)currentBook=id;renderMap();renderDetail();if(view==='library')renderLibrary();$('detail').classList.add('open');if(center&&view==='map')centerNode(id);}
+function selectNode(id,center=false){if(!node(id))return;selected=id;if(node(id).kind!=='skill'&&allTasks(node(id)).length)currentBook=id;renderMap();renderDetail();if(view==='library')renderLibrary();$('detail').classList.add('open');syncLayoutControls();if(center&&view==='map')centerNode(id);}
 function setView(value){view=value;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));$('mapView').hidden=view!=='map';$('libraryView').hidden=view!=='library';$('journalView').hidden=view!=='journal';$('starterBanner').hidden=view!=='map'||state.settings.starterDismissed;if(view==='library')renderLibrary();if(view==='journal')renderJournal();renderDetail();if(value==='map'&&!layout){renderMap();fitWidth();}}
 function renderSidebar(){const total=nodes.filter(n=>isDone(n.id)).length;const pieces=nodes.reduce((sum,n)=>sum+allTasks(n).filter(t=>taskDone(n,t)).length,0);$('statNodes').textContent=total;$('statReady').textContent=nodes.filter(n=>status(n)==='ready').length;$('statPieces').textContent=pieces;$('growthPoints').innerHTML=`${currentPoints()}<small>枚成长点</small>`;$('journey').innerHTML=DATA.stages.map((s,i)=>{const list=nodes.filter(n=>n.stage===i);return `<button class="journey-btn ${String(activeStage)===String(i)?'active':''}" data-action="stage" data-stage="${i}"><span class="stepnum">${s.roman}</span><span>${esc(s.name)}<small>${list.filter(n=>isDone(n.id)).length} / ${list.length} 个节点</small></span></button>`;}).join('');$('focusList').innerHTML=state.focus.filter(id=>node(id)).map(id=>`<button class="goal-link" data-action="goto" data-id="${id}">${icon('pin')}<span>${esc(node(id).title)}<br><small class="muted">${status(node(id))==='done'?'已达标 · 继续复习':status(node(id))==='ready'?'已解锁 · 可以练习':'先确认前置基础'}</small></span></button>`).join('')||'<p class="hint" style="font-size:11px;margin-bottom:12px">在节点详情中点图钉，关注你的下一项练习。</p>';$('undoButton').disabled=!undoStack.length;}
 function render(){if(!node(selected))selected='posture';$('demoBanner').hidden=!demo;$('demoButton').innerHTML=icon('spark')+`<span>${demo?'退出演示':'看看演示'}</span>`;$('starterBanner').hidden=view!=='map'||state.settings.starterDismissed;renderSidebar();renderMap();renderDetail();if(view==='library')renderLibrary();if(view==='journal')renderJournal();}
@@ -178,7 +249,7 @@ function renderDetail(){const n=node(selected);if(!n)return;const oldScroll=$('d
  ${relatives.length?`<div class="detail-section"><div class="section-head"><span>关联教材 / 技术</span><small>虚线 · 不阻塞解锁</small></div><div class="related-tags">${relatives.map(id=>`<button data-action="goto" data-id="${id}">${esc(node(id).title)}</button>`).join('')}</div>`:''}
  <div class="refbox">${esc(n.ref)}${n.source?`<br><a href="${esc(n.source)}" target="_blank" rel="noopener noreferrer">查看教材来源 ↗</a>`:''}</div>
  <div class="detail-section"><div class="section-head"><span>我的练习笔记</span><small>保存于本浏览器</small></div><textarea class="detail-notes" id="nodeNotes" data-id="${n.id}" maxlength="6000" placeholder="速度、弓段、老师提醒、下次想解决的问题…">${esc(state.notes[n.id]?.text||'')}</textarea><div class="row" style="margin-top:9px"><label for="nodeBpm" class="hint" style="white-space:nowrap">目标速度</label><input id="nodeBpm" data-id="${n.id}" type="number" min="20" max="300" placeholder="BPM" value="${esc(state.notes[n.id]?.bpm||'')}" style="width:83px;font-size:11px;padding:7px"><span class="hint" style="font-size:10px">选填，不用于判级</span></div><div class="detail-note-meta" id="noteSaved">笔记在输入时自动保存。</div></div><div class="divider"></div><p class="hint" style="font-size:10px">已点亮也可以继续练。出现不适时暂停动作，和老师一起调整；不必为了通关强撑。</p>`;
- if(lastDetailId===n.id)$('detail').scrollTop=oldScroll;else $('detail').scrollTop=0;lastDetailId=n.id;}
+ if(lastDetailId===n.id)$('detail').scrollTop=oldScroll;else $('detail').scrollTop=0;lastDetailId=n.id;syncLayoutControls();}
 function taskRows(n,grid=true){const req=requiredTasks(n),chosen=new Set(req.map(t=>t.id));return allTasks(n).map((t,index)=>{const d=taskDone(n,t),available=canTask(n,t),s=d?'done':available?'ready':'locked',optional=!chosen.has(t.id);const hist=state.taskDone[t.id]&&!d;return `<button class="${grid?'task-tile':'task-row'} ${s}" data-action="task" data-id="${n.id}" data-task="${t.id}" ${!available?'disabled':''} title="${d?'点击撤销这首的达标记录':available?'自我确认这首已经达标':'先完成前置或前一首已选曲目'}"><span class="tasknum">${String(index+1).padStart(2,'0')}</span><span class="grow"><strong>${esc(t.title)}</strong><small>${esc(t.by||'自定义分段')} · ${hist?'历史已记录 / 当前锁定':d?'已达标':available?'可确认达标':'尚未解锁'}${optional?' · 选修':''}</small></span>${icon(d?'check':available?'plus':'lock')}</button>`;}).join('');}
 function renderLibrary(){let n=node(currentBook);if(!n||!allTasks(n).length){currentBook='suz1';n=node(currentBook);}const stats=taskStats(n);const books=nodes.filter(n=>n.kind==='book'),etudes=nodes.filter(n=>n.kind==='etude'),custom=nodes.filter(n=>n.kind==='custom');$('libraryView').innerHTML=`<div class="view-heading"><div><h2>教材是练习场，不是等级证书。</h2><p class="hint">曲目逐首记录，技术单独自评。三条线并行，不必整本刷完才换下一本。</p></div><button class="btn small ghost" data-action="mapping">对照表</button></div><div class="eyebrow" style="margin-bottom:12px">SUZUKI / 铃木 1–10</div><div class="library-grid">${books.map((b,i)=>{const x=taskStats(b);return `<button class="booktile ${b.id===currentBook?'active':''}" data-action="book-select" data-id="${b.id}"><span class="vol">${String(i+1).padStart(2,'0')}</span><span class="bookname">${esc(b.title)}</span><span class="bookcount">${x.done} / ${x.chosen} 所选任务 ${isDone(b.id)?'✓':''}</span><div class="progressbar"><i style="width:${x.chosen?x.done/x.chosen*100:0}%"></i></div></button>`;}).join('')}</div><div class="row between"><div class="eyebrow">ETUDES / 练习曲选修</div><span class="hint" style="font-size:9px">下列排列不代表固定先后次序</span></div><div class="etudegrid">${etudes.map(b=>{const x=taskStats(b);return `<button class="etudecard ${b.id===currentBook?'active':''}" data-action="book-select" data-id="${b.id}"><strong>${esc(b.title)}</strong><small>${x.chosen?x.done+' / '+x.chosen+' 首所选任务':'待选择老师布置的曲目'}${isDone(b.id)?' · 已达标':''}</small></button>`;}).join('')}</div>${custom.length?`<div class="eyebrow">CUSTOM / 自定义目标</div><div class="etudegrid">${custom.map(b=>`<button class="etudecard" data-action="${allTasks(b).length?'book-select':'goto'}" data-id="${b.id}"><strong>${esc(b.title)}</strong><small>${status(b)==='done'?'已点亮':'自定义节点'}</small></button>`).join('')}</div>`:''}
  <div class="task-board" id="taskBoard"><div class="task-board-head"><div><h3>${esc(n.title)}</h3><p class="hint" style="font-size:10px;margin-top:5px">${esc(n.ref)}</p></div><button class="btn small" data-action="edit-tasks" data-id="${n.id}">${icon('edit')} 选择 / 拆分</button></div><div class="row wrap"><span class="pill ${prerequisitesMet(n)?'amber':''}">${prerequisitesMet(n)?'前置已满足':'先完成前置技能'}</span><span class="pill">${stats.done} / ${stats.chosen||'尚未选定'} 已选任务达标</span><label class="toolbar-check" style="display:flex;margin-left:auto"><input type="checkbox" data-sequence="${n.id}" ${sequenceOn(n)?'checked':''}>按所选任务顺序解锁</label></div>${!prerequisitesMet(n)?`<p class="hint" style="margin-top:12px;font-size:11px">未满足：${(n.requires||[]).filter(id=>!isDone(id)).map(id=>`<button class="linkbutton" data-action="goto" data-id="${id}">${esc(node(id).title)}</button>`).join(' · ')}${n.mode==='any'?'（满足任一项即可）':''}。可以先在地图补录已会的基础。</p>`:''}${!stats.chosen?'<div class="modal-callout">这本练习曲没有默认必刷曲目。先点击「选择 / 拆分」，勾选老师这次布置的几首；不是要求把整本全部练完。</div>':''}<div class="task-grid">${taskRows(n,true)}</div><div class="row between wrap" style="margin-top:17px;gap:12px"><p class="hint" style="font-size:10px;max-width:360px">完成曲目不自动认证关联技能；默认目录可按手中版本与老师选曲调整。多乐章条目可另加分段。</p><button class="btn ${isDone(n.id)?'':'primary'} small" data-action="${isDone(n.id)?'review':'complete'}" data-id="${n.id}" ${!isDone(n.id)&&!canComplete(n)?'disabled':''}>${icon(isDone(n.id)?'clock':'spark')}${isDone(n.id)?'记录本阶段复习':'确认本阶段达标 +1'}</button></div></div>`;}
@@ -231,9 +302,17 @@ function load(){let embedded=null,local=null,warning='';try{const value=JSON.par
  try{const stored=localStorage.getItem(STORE_KEY);if(stored)local=validateState(JSON.parse(stored));}catch(error){storageOkay=false;warning='无法读取本地存档：'+error.message+'。请保留备份，当前先显示可用数据。';}
  state=local&&embedded?(Date.parse(local.savedAt)>=Date.parse(embedded.savedAt)?local:embedded):(local||embedded||defaultState());refreshNodes();assertDAG(nodes);pruneInvalid();if(warning){storageWarn(warning);setTimeout(()=>toast(warning,true),300);}else if(embedded&&!local){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catch(error){storageWarn('内嵌存档已载入，但当前浏览器不能持久保存。请使用导出功能。');}}
 }
-function closeMobileNav(){$('sidebar').classList.remove('open');$('mobileBackdrop').classList.remove('open');}
+function isPhoneLayout(){return innerWidth<=730;}
+function isDetailDrawerLayout(){return innerWidth<=1030;}
+function syncLayoutControls(){const app=document.querySelector('.app'),sidebar=$('sidebar'),detail=$('detail'),menu=$('mobileMenu'),detailToggle=$('openDetail');if(!app||!sidebar||!detail||!menu||!detailToggle)return;const phone=isPhoneLayout(),drawer=isDetailDrawerLayout();const sidebarOpen=phone?sidebar.classList.contains('open'):!app.classList.contains('sidebar-collapsed');const detailOpen=drawer?detail.classList.contains('open'):!detail.classList.contains('detail-collapsed');const menuLabel=phone?(sidebarOpen?'关闭导航':'展开导航'):(sidebarOpen?'收起导航':'展开导航');menu.setAttribute('aria-expanded',String(sidebarOpen));menu.setAttribute('aria-label',menuLabel);menu.title=menuLabel;sidebar.inert=!sidebarOpen;sidebar.setAttribute('aria-hidden',String(!sidebarOpen));const detailLabel=detailOpen?'收起当前节点详情':'打开当前节点详情';detailToggle.setAttribute('aria-expanded',String(detailOpen));detailToggle.setAttribute('aria-label',detailLabel);detailToggle.title=detailLabel;detail.inert=!detailOpen;detail.setAttribute('aria-hidden',String(!detailOpen));}
+function setSidebarOpen(open){const app=document.querySelector('.app'),sidebar=$('sidebar'),backdrop=$('mobileBackdrop');if(isPhoneLayout()){sidebar.classList.toggle('open',open);backdrop.classList.toggle('open',open);}else{sidebar.classList.remove('open');backdrop.classList.remove('open');app.classList.toggle('sidebar-collapsed',!open);}syncLayoutControls();}
+function toggleSidebar(){const app=document.querySelector('.app'),sidebar=$('sidebar');const open=isPhoneLayout()?sidebar.classList.contains('open'):!app.classList.contains('sidebar-collapsed');setSidebarOpen(!open);}
+function setDetailOpen(open){const detail=$('detail');if(isDetailDrawerLayout()){detail.classList.toggle('open',open);if(open)detail.classList.remove('detail-collapsed');}else{detail.classList.remove('open');detail.classList.toggle('detail-collapsed',!open);}syncLayoutControls();}
+function toggleDetail(){const detail=$('detail');const open=isDetailDrawerLayout()?detail.classList.contains('open'):!detail.classList.contains('detail-collapsed');setDetailOpen(!open);}
+function closeDetail(){setDetailOpen(false);}
+function closeMobileNav(){$('sidebar').classList.remove('open');$('mobileBackdrop').classList.remove('open');syncLayoutControls();}
 function wireEvents(){document.addEventListener('click',event=>{const target=event.target.closest('[data-action]');if(!target||target.disabled)return;const id=target.dataset.id,act=target.dataset.action;
- switch(act){case 'select':selectNode(id);break;case 'goto':setView('map');selectNode(id,true);closeMobileNav();break;case 'stage':jumpStage(target.dataset.stage);break;case 'complete':completeNode(id);break;case 'rollback':rollbackNode(id);break;case 'review':reviewNode(id);break;case 'pin':toggleFocus(id);break;case 'task':markTask(id,target.dataset.task);break;case 'edit-prereq':editPrerequisites(id);break;case 'edit-tasks':editTasks(id);break;case 'modal-close':closeModal();break;case 'detail-close':$('detail').classList.remove('open');break;case 'mapping':showMapping();break;case 'mapping-go':closeModal();setView('map');selectNode(id,true);break;case 'board':currentBook=id;setView('library');selected=id;renderLibrary();renderDetail();$('detail').classList.remove('open');requestAnimationFrame(()=>$('taskBoard')?.scrollIntoView({block:'start',behavior:'smooth'}));break;case 'book-select':currentBook=id;selected=id;renderLibrary();renderDetail();renderMap();break;case 'search-go':query='';$('search').value='';$('searchResults').hidden=true;selectNode(id,true);break;case 'export-json':exportJSON();break;case 'export-html':exportHTML();break;case 'import-json':$('importFile').click();break;case 'demo':toggleDemo();break;case 'setup':showSetup();break;case 'reset':resetState();break;}
+ switch(act){case 'select':selectNode(id);break;case 'goto':setView('map');selectNode(id,true);closeMobileNav();break;case 'stage':jumpStage(target.dataset.stage);break;case 'complete':completeNode(id);break;case 'rollback':rollbackNode(id);break;case 'review':reviewNode(id);break;case 'pin':toggleFocus(id);break;case 'task':markTask(id,target.dataset.task);break;case 'edit-prereq':editPrerequisites(id);break;case 'edit-tasks':editTasks(id);break;case 'modal-close':closeModal();break;case 'detail-close':closeDetail();break;case 'mapping':showMapping();break;case 'mapping-go':closeModal();setView('map');selectNode(id,true);break;case 'board':currentBook=id;setView('library');selected=id;renderLibrary();renderDetail();closeDetail();requestAnimationFrame(()=>$('taskBoard')?.scrollIntoView({block:'start',behavior:'smooth'}));break;case 'book-select':currentBook=id;selected=id;renderLibrary();renderDetail();renderMap();break;case 'search-go':query='';$('search').value='';$('searchResults').hidden=true;selectNode(id,true);break;case 'export-json':exportJSON();break;case 'export-html':exportHTML();break;case 'import-json':$('importFile').click();break;case 'demo':toggleDemo();break;case 'setup':showSetup();break;case 'reset':resetState();break;}
  });document.addEventListener('change',event=>{const t=event.target;if(t.matches('[data-check]')){const id=t.dataset.id,index=Number(t.dataset.check),set=new Set(state.checks[id]||[]);t.checked?set.add(index):set.delete(index);state.checks[id]=[...set];save();}if(t.id==='teacherVerified'){state.verified[t.dataset.id]=t.checked;save();}if(t.matches('[data-sequence]')){const id=t.dataset.sequence,value=t.checked;configChange('调整曲目解锁顺序',()=>{state.sequence[id]=value;});}});
  document.addEventListener('input',event=>{const t=event.target;if(t.id==='nodeNotes'){state.notes[t.dataset.id]={...(state.notes[t.dataset.id]||{bpm:''}),text:t.value};save();$('noteSaved').textContent=demo?'演示笔记已暂存':storageOkay?'笔记已保存':'笔记暂存本页，请导出备份';}if(t.id==='nodeBpm'){const v=t.value;if(v&&(!Number.isFinite(Number(v))||Number(v)<20||Number(v)>300)){return;}state.notes[t.dataset.id]={...(state.notes[t.dataset.id]||{text:''}),bpm:v};save();}});
  document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>setView(btn.dataset.view)));
@@ -244,16 +323,17 @@ function wireEvents(){document.addEventListener('click',event=>{const target=eve
  $('zoomIn').onclick=()=>applyZoom(true,zoom+.1);$('zoomOut').onclick=()=>applyZoom(true,zoom-.1);$('fitMap').onclick=fitWidth;$('currentLocation').onclick=()=>centerNode(selected);
  $('addNodeTop').onclick=showAddNode;$('addNodeToolbar').onclick=showAddNode;$('setupButton').onclick=showSetup;$('dismissStarter').onclick=()=>{state.settings.starterDismissed=true;save();$('starterBanner').hidden=true;};$('demoButton').onclick=toggleDemo;$('exitDemo').onclick=toggleDemo;$('undoButton').onclick=undoLast;$('saveMenu').onclick=showSaveMenu;$('helpButton').onclick=showHelp;$('rulesButton').onclick=showHelp;$('warningExport').onclick=exportJSON;
  $('nextAvailable').onclick=()=>{const next=nodes.find(n=>status(n)==='ready'&&n.id!==selected&&n.kind==='skill')||nodes.find(n=>status(n)==='ready');if(next){setView('map');selectNode(next.id,true);closeMobileNav();}else toast('所有内置技能节点都已点亮，可继续复习或新增个人支线。');};
- $('mobileMenu').onclick=()=>{$('sidebar').classList.add('open');$('mobileBackdrop').classList.add('open');};$('mobileBackdrop').onclick=closeMobileNav;$('openDetail').onclick=()=>$('detail').classList.add('open');
+ $('mobileMenu').onclick=toggleSidebar;$('mobileBackdrop').onclick=closeMobileNav;$('openDetail').onclick=toggleDetail;
  $('importFile').onchange=e=>importJSON(e.target.files?.[0]);
  $('modal').addEventListener('click',e=>{if(e.target!==$('modal'))return;const r=$('modal').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();});
  const vp=$('viewport');vp.addEventListener('pointerdown',e=>{if(e.button!==0||e.pointerType==='touch'||e.target.closest('button,input,select,a'))return;drag={x:e.clientX,y:e.clientY,left:vp.scrollLeft,top:vp.scrollTop};vp.setPointerCapture(e.pointerId);});vp.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3){vp.classList.add('grabbing');vp.scrollLeft=drag.left-dx;vp.scrollTop=drag.top-dy;}});const endDrag=()=>{drag=null;vp.classList.remove('grabbing');};vp.addEventListener('pointerup',endDrag);vp.addEventListener('pointercancel',endDrag);vp.addEventListener('lostpointercapture',endDrag);
  vp.addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();const r=vp.getBoundingClientRect();applyZoom(true,zoom*(e.deltaY>0?.93:1.07),{x:e.clientX-r.left,y:e.clientY-r.top});}},{passive:false});
- document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&!$('modal').open){e.preventDefault();setView('map');$('search').focus();}if(e.key==='Escape'&&!$('modal').open){$('detail').classList.remove('open');closeMobileNav();}});
- window.addEventListener('resize',()=>{if(layout)applyZoom(false);});
+ document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&!$('modal').open){e.preventDefault();setView('map');$('search').focus();}if(e.key==='Escape'&&!$('modal').open){closeDetail();closeMobileNav();}});
+ window.addEventListener('resize',()=>{if(layout)applyZoom(false);syncLayoutControls();});
  window.addEventListener('storage',e=>{if(e.key!==STORE_KEY||!e.newValue||demo)return;try{const incoming=validateState(JSON.parse(e.newValue));if(Date.parse(incoming.savedAt)>Date.parse(state.savedAt)){state=incoming;undoStack=[];refreshNodes();pruneInvalid();render();toast('已同步同一浏览器另一个页面的更新。');}}catch(error){toast('另一页面写入的存档无效，当前进度保持不变。',true);}});
 }
-load();wireEvents();render();requestAnimationFrame(()=>{fitWidth();if(innerWidth<730)centerNode('posture');});
+load();wireEvents();
+render();syncLayoutControls();requestAnimationFrame(()=>{fitWidth();if(innerWidth<730)centerNode('posture');});
 // Debug/testing interface exposes pure state and gate checks, not a privileged bypass.
 window.XianTu={getState:()=>clone(state),getNodes:()=>clone(nodes),getStatus:id=>status(node(id)),canComplete:id=>canComplete(node(id)),canTask:(id,tid)=>canTask(node(id),allTasks(node(id)).find(t=>t.id===tid)),validateState,assertDAG,points:currentPoints,select:id=>selectNode(id,true),getLayout:()=>({height:layout.height,coords:Object.fromEntries(layout.coords)})};
 
